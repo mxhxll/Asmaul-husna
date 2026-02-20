@@ -16,11 +16,31 @@ return Math.round(done/names.length*100);
 }
 
 function playAudio(name){
-let utter = new SpeechSynthesisUtterance(name.arabic);
-utter.lang="ar-SA";
+
+const text = name.arabic;
+
+function speak(){
+let voices = speechSynthesis.getVoices();
+let arabicVoice = voices.find(v => v.lang.startsWith("ar"));
+
+let utter = new SpeechSynthesisUtterance(text);
+if(arabicVoice) utter.voice = arabicVoice;
+
+utter.lang = "ar-SA";
+utter.rate = 0.85;
+utter.pitch = 1;
+
+speechSynthesis.cancel();
 speechSynthesis.speak(utter);
 }
 
+// iOS charge les voix après interaction
+if(speechSynthesis.getVoices().length === 0){
+speechSynthesis.onvoiceschanged = speak;
+}else{
+speak();
+}
+}
 function showHome(){
 app.innerHTML = `
 <h2>Asma ul Husna</h2>
