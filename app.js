@@ -17,29 +17,19 @@ return Math.round(done/names.length*100);
 
 function playAudio(name){
 
-const text = name.arabic;
+// nom en minuscules sans espaces
+let clean = name.translit
+.toLowerCase()
+.replace(/[^a-z]/g,"");
 
-function speak(){
-let voices = speechSynthesis.getVoices();
-let arabicVoice = voices.find(v => v.lang.startsWith("ar"));
+// source audio publique
+let url = `https://everyayah.com/data/AsmaulHusna_AbdulrahmanAlSudais_64kbps/${clean}.mp3`;
 
-let utter = new SpeechSynthesisUtterance(text);
-if(arabicVoice) utter.voice = arabicVoice;
+let audio = new Audio(url);
+audio.play().catch(()=>{
+alert("Audio indisponible pour ce nom");
+});
 
-utter.lang = "ar-SA";
-utter.rate = 0.85;
-utter.pitch = 1;
-
-speechSynthesis.cancel();
-speechSynthesis.speak(utter);
-}
-
-// iOS charge les voix après interaction
-if(speechSynthesis.getVoices().length === 0){
-speechSynthesis.onvoiceschanged = speak;
-}else{
-speak();
-}
 }
 function showHome(){
 app.innerHTML = `
