@@ -32,11 +32,14 @@ const app=document.getElementById("app");
 
 function showHome(){
 app.innerHTML=`
-<div class="card" onclick="showList()">📖 Apprendre</div>
+<div class="card" id="learn">📖 Apprendre</div>
 <div class="card">📿 Invoquer (bientôt)</div>
 <div class="card">🧠 Quiz (bientôt)</div>
-<div class="card" onclick="showProgress()">📊 Progression</div>
+<div class="card" id="progress">📊 Progression</div>
 `;
+
+document.getElementById("learn").onclick = showList;
+document.getElementById("progress").onclick = showProgress;
 }
 
 function showList(){
