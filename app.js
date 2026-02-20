@@ -1,6 +1,21 @@
 const names = NAMES;
 const app = document.getElementById("app");
+const app = document.getElementById("app");
+// déblocage audio iOS
+let audioUnlocked = false;
 
+function unlockAudio(){
+if(audioUnlocked) return;
+
+const audio = new Audio();
+audio.src = "data:audio/mp3;base64,//uQxAAAA"; // micro son vide
+audio.play().then(()=>{
+audioUnlocked = true;
+}).catch(()=>{});
+}
+
+document.body.addEventListener("touchstart", unlockAudio, {once:true});
+document.body.addEventListener("click", unlockAudio, {once:true});
 function saveMemorized(id){
 localStorage.setItem("memorized_"+id,"1");
 showName(id);
@@ -17,21 +32,11 @@ return Math.round(done/names.length*100);
 
 function playAudio(name){
 
-// numéro du nom (1 → 99) en 3 chiffres : 001, 002...
 let id = String(name.id).padStart(3,'0');
-
-// source audio fiable
 let url = `https://cdn.islamic.network/quran/audio/64/ar.alafasy/${id}.mp3`;
 
-let audio = new Audio();
-audio.src = url;
-audio.preload = "auto";
-
-audio.play()
-.then(()=>{})
-.catch(()=>{
-alert("iPhone bloque l'audio — reclique encore une fois");
-});
+const audio = new Audio(url);
+audio.play();
 }
 function showHome(){
 app.innerHTML = `
