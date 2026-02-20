@@ -32,7 +32,11 @@ app.innerHTML = `
 }
 
 function showList(){
-app.innerHTML="<h2>Choisis un Nom</h2>";
+app.innerHTML=`
+<button onclick="showHome()">🏠 Menu</button>
+<h2>Choisis un Nom</h2>
+`;
+
 names.forEach(n=>{
 app.innerHTML+=`
 <div class="card" onclick="showName(${n.id})">
@@ -40,7 +44,6 @@ ${n.translit} ${isMemorized(n.id)?"✅":""}
 </div>`;
 });
 }
-
 function showName(id){
 const n = names.find(x=>x.id===id);
 const d = DUAS[id];
