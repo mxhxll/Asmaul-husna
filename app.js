@@ -4,8 +4,6 @@ const app = document.getElementById("app");
 function showHome(){
   app.innerHTML = `
     <div class="card" id="learn">📖 Apprendre</div>
-    <div class="card">📿 Invoquer (bientôt)</div>
-    <div class="card">🧠 Quiz (bientôt)</div>
     <div class="card" id="progress">📊 Progression</div>
   `;
   document.getElementById("learn").onclick = showList;
@@ -24,18 +22,6 @@ function showList(){
   });
 }
 
-function generateDescription(name){
-  return `${name.translit} signifie "${name.meaning}". Médite sur ce Nom et invoque Allah en comprenant Sa grandeur.`;
-}
-
-function generateUsage(name){
-  return `Invoque ${name.translit} lorsque tu as besoin de ${name.meaning.toLowerCase()} dans ta vie.`;
-}
-
-function generateDua(name){
-  return `Ya ${name.translit.replace("Al-","").replace("Ar-","")}, accorde-moi ${name.meaning.toLowerCase()} dans ma vie et rapproche-moi de Toi.`;
-}
-
 function showName(id){
   const n = names.find(x => x.id === id);
 
@@ -43,16 +29,13 @@ function showName(id){
     <button onclick="showList()">⬅ Retour</button>
     <h2>${n.arabic}</h2>
     <h3>${n.translit}</h3>
-    <p><b>${n.meaning}</b></p>
+    <p><strong>${n.meaning}</strong></p>
 
     <h4>📖 Description</h4>
-    <p>${generateDescription(n)}</p>
+    <p>${n.translit} signifie "${n.meaning}". Médite sur ce Nom et invoque Allah avec conscience.</p>
 
-    <h4>🕊️ Quand l'utiliser</h4>
-    <p>${generateUsage(n)}</p>
-
-    <h4>🤲 Doua</h4>
-    <p>${generateDua(n)}</p>
+    <h4>🤲 Doua suggérée</h4>
+    <p>Ya ${n.translit.replace("Al-","").replace("Ar-","")}, accorde-moi ${n.meaning.toLowerCase()} dans ma vie.</p>
 
     <button onclick="memorized(${id})">⭐ J'ai mémorisé</button>
   `;
