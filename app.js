@@ -17,19 +17,21 @@ return Math.round(done/names.length*100);
 
 function playAudio(name){
 
-// nom en minuscules sans espaces
-let clean = name.translit
-.toLowerCase()
-.replace(/[^a-z]/g,"");
+// numéro du nom (1 → 99) en 3 chiffres : 001, 002...
+let id = String(name.id).padStart(3,'0');
 
-// source audio publique
-let url = `https://everyayah.com/data/AsmaulHusna_AbdulrahmanAlSudais_64kbps/${clean}.mp3`;
+// source audio fiable
+let url = `https://cdn.islamic.network/quran/audio/64/ar.alafasy/${id}.mp3`;
 
-let audio = new Audio(url);
-audio.play().catch(()=>{
-alert("Audio indisponible pour ce nom");
+let audio = new Audio();
+audio.src = url;
+audio.preload = "auto";
+
+audio.play()
+.then(()=>{})
+.catch(()=>{
+alert("iPhone bloque l'audio — reclique encore une fois");
 });
-
 }
 function showHome(){
 app.innerHTML = `
