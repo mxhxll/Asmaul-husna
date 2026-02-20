@@ -1,79 +1,106 @@
 const names = NAMES;
 const app = document.getElementById("app");
 
+function saveMemorized(id){
+localStorage.setItem("memorized_"+id,"1");
+showName(id);
+}
+
+function isMemorized(id){
+return localStorage.getItem("memorized_"+id)=="1";
+}
+
+function progress(){
+let done = names.filter(n=>isMemorized(n.id)).length;
+return Math.round(done/names.length*100);
+}
+
+function playAudio(name){
+let utter = new SpeechSynthesisUtterance(name.arabic);
+utter.lang="ar-SA";
+speechSynthesis.speak(utter);
+}
+
 function showHome(){
-  app.innerHTML = `
-    <div class="card" id="learn">📖 Apprendre</div>
-    <div class="card" id="progress">📊 Progression</div>
-  `;
-  document.getElementById("learn").onclick = showList;
-  document.getElementById("progress").onclick = showProgress;
+app.innerHTML = `
+<h2>Asma ul Husna</h2>
+<p>Progression : ${progress()}%</p>
+
+<div class="card" onclick="showList()">📖 Apprendre</div>
+<div class="card" onclick="showQuiz()">🧠 Quiz</div>
+`;
 }
 
 function showList(){
-  app.innerHTML = "<h2>Choisis un Nom</h2>";
-  names.forEach(n => {
-    app.innerHTML += `
-      <div class="card" onclick="showName(${n.id})">
-        ${n.translit}<br>
-        <small>${n.meaning}</small>
-      </div>
-    `;
-  });
+app.innerHTML="<h2>Choisis un Nom</h2>";
+names.forEach(n=>{
+app.innerHTML+=`
+<div class="card" onclick="showName(${n.id})">
+${n.translit} ${isMemorized(n.id)?"✅":""}
+</div>`;
+});
 }
 
 function showName(id){
-  const n = names.find(x => x.id === id);
-  const d = DUAS[id];
+const n = names.find(x=>x.id===id);
+const d = DUAS[id];
 
-  if(!d){
-    app.innerHTML = `
-      <button onclick="showList()">⬅ Retour</button>
-      <h2>${n.arabic}</h2>
-      <h3>${n.translit}</h3>
-      <p><strong>${n.meaning}</strong></p>
-      <p>Contenu en préparation.</p>
-    `;
-    return;
-  }
+app.innerHTML=`
+<button onclick="showList()">⬅ Retour</button>
 
-  app.innerHTML = `
-    <button onclick="showList()">⬅ Retour</button>
-    <h2>${n.arabic}</h2>
-    <h3>${n.translit}</h3>
-    <p><strong>${n.meaning}</strong></p>
+<h2>${n.arabic}</h2>
+<h3>${n.translit}</h3>
+<p>${n.meaning}</p>
 
-    <h4>📖 Description</h4>
-    <p>${d.desc}</p>
+<button onclick='playAudio(${JSON.stringify(n)})'>🔊 Écouter</button>
 
-    <h4>🕊️ Quand l'utiliser</h4>
-    <p>${d.usage}</p>
+${d?`
+<h4>Description</h4><p>${d.desc}</p>
+<h4>Quand l'utiliser</h4><p>${d.usage}</p>
+<h4>Doua</h4>
+<p>${d.arabic}</p>
+<p><i>${d.phonetic}</i></p>
+<p>${d.fr}</p>
+`:"<p>Contenu en préparation</p>"}
 
-    <h4>🤲 Doua</h4>
-    <p>${d.arabic}</p>
-    <p><i>${d.phonetic}</i></p>
-    <p>${d.fr}</p>
-
-    <button onclick="memorized(${id})">⭐ J'ai mémorisé</button>
-  `;
-}
-function memorized(id){
-  localStorage.setItem("name_"+id,"1");
-  alert("Ajouté à mémorisé !");
+<br>
+<button onclick="saveMemorized(${id})">
+${isMemorized(id)?"Réviser":"J’ai mémorisé"}
+</button>
+`;
 }
 
-function showProgress(){
-  let total = names.length;
-  let done = 0;
-  names.forEach(n => {
-    if(localStorage.getItem("name_"+n.id)) done++;
-  });
+let currentQuiz=null;
 
-  app.innerHTML = `
-    <h2>Progression</h2>
-    <p>${done} / ${total} noms mémorisés</p>
-    <button onclick="showHome()">Accueil</button>
-  `;
+function showQuiz(){
+let pool = names.filter(n=>!isMemorized(n.id));
+if(pool.length==0) pool=names;
+
+currentQuiz = pool[Math.floor(Math.random()*pool.length)];
+
+let options=[currentQuiz];
+while(options.length<4){
+let r=names[Math.floor(Math.random()*names.length)];
+if(!options.includes(r)) options.push(r);
+}
+options.sort(()=>Math.random()-0.5);
+
+app.innerHTML=`
+<h2>Quel nom correspond ?</h2>
+<p>${currentQuiz.meaning}</p>
+${options.map(o=>`<div class="card" onclick="answerQuiz(${o.id})">${o.translit}</div>`).join("")}
+<button onclick="showHome()">Quitter</button>
+`;
+}
+
+function answerQuiz(id){
+if(id===currentQuiz.id){
+saveMemorized(id);
+alert("Correct !");
+}else{
+alert("Non 😅");
+}
+showQuiz();
 }
 
 showHome();
