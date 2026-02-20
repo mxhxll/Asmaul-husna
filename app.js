@@ -24,6 +24,18 @@ function showList(){
 
 function showName(id){
   const n = names.find(x => x.id === id);
+  const d = DUAS[id];
+
+  if(!d){
+    app.innerHTML = `
+      <button onclick="showList()">⬅ Retour</button>
+      <h2>${n.arabic}</h2>
+      <h3>${n.translit}</h3>
+      <p><strong>${n.meaning}</strong></p>
+      <p>Contenu en préparation.</p>
+    `;
+    return;
+  }
 
   app.innerHTML = `
     <button onclick="showList()">⬅ Retour</button>
@@ -32,15 +44,19 @@ function showName(id){
     <p><strong>${n.meaning}</strong></p>
 
     <h4>📖 Description</h4>
-    <p>${n.translit} signifie "${n.meaning}". Médite sur ce Nom et invoque Allah avec conscience.</p>
+    <p>${d.desc}</p>
 
-    <h4>🤲 Doua suggérée</h4>
-    <p>Ya ${n.translit.replace("Al-","").replace("Ar-","")}, accorde-moi ${n.meaning.toLowerCase()} dans ma vie.</p>
+    <h4>🕊️ Quand l'utiliser</h4>
+    <p>${d.usage}</p>
+
+    <h4>🤲 Doua</h4>
+    <p>${d.arabic}</p>
+    <p><i>${d.phonetic}</i></p>
+    <p>${d.fr}</p>
 
     <button onclick="memorized(${id})">⭐ J'ai mémorisé</button>
   `;
 }
-
 function memorized(id){
   localStorage.setItem("name_"+id,"1");
   alert("Ajouté à mémorisé !");
