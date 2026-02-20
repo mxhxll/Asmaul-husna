@@ -1,32 +1,4 @@
-const names = [
-{
-id:1,
-arabic:"ٱلرَّحْمَـٰنُ",
-translit:"Ar-Rahman",
-meaning:"Le Tout Miséricordieux",
-desc:"Sa miséricorde englobe toute la création.",
-usage:"À invoquer pour la miséricorde, la douceur du cœur et la baraka.",
-dua:"Ya Rahman, couvre-moi de Ta miséricorde ici-bas et dans l’au-delà."
-},
-{
-id:2,
-arabic:"ٱلرَّحِيمُ",
-translit:"Ar-Rahim",
-meaning:"Le Très Miséricordieux",
-desc:"Miséricorde مخصوصة pour les croyants.",
-usage:"Pour le pardon et l’au-delà.",
-dua:"Ya Rahim, pardonne-moi et fais-moi miséricorde."
-},
-{
-id:3,
-arabic:"ٱلْمَلِكُ",
-translit:"Al-Malik",
-meaning:"Le Souverain",
-desc:"Le Roi absolu qui possède toute chose.",
-usage:"Quand tu te sens impuissant ou dominé.",
-dua:"Ya Malik, accorde-moi la maîtrise de moi-même et la dignité."
-}
-];
+const names = NAMES;
 
 const app=document.getElementById("app");
 
