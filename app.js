@@ -72,7 +72,7 @@ app.innerHTML=`
 <h3>${n.translit}</h3>
 <p>${n.meaning}</p>
 
-<button onclick='playAudio(${JSON.stringify(n)})'>🔊 Écouter</button>
+<button onclick="playAudio(${n.id})">🔊 Écouter</button>
 
 ${d?`
 <h4>Description</h4><p>${d.desc}</p>
